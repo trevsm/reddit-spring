@@ -1,20 +1,37 @@
-import {useState} from 'react';
-import {View, Text} from 'react-native';
+import {useState, useEffect, useMemo} from 'react';
+import {View, Text, ScrollView} from 'react-native';
 import styled from 'styled-components/native';
+import {SortType} from '../api/types';
+import useQueryPosts from '../api/useQueryPosts';
+import Card from '../components/Card';
+import Loading from '../components/Loading';
 
-const Page = styled(View)`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  background-color: lightblue;
+const Page = styled(ScrollView)`
+  background-color: #ffffff;
 `;
 
 export default function Home() {
-  const [data, setData] = useState({});
+  const [posts, setPosts] = useState([]);
+  const {getPosts, loading} = useQueryPosts();
+  const [sort, setSort] = useState<SortType>('hot');
 
-  return (
-    <Page>
-      <Text>Home Screen</Text>
-    </Page>
+  const cards = useMemo(
+    () =>
+      posts
+        ? posts.map((post, index) => <Card key={index} postData={post} />)
+        : null,
+    [posts]
   );
+
+  useEffect(() => {
+    const init = async () => {
+      const posts = await getPosts({sort: 'new'});
+      setPosts(posts);
+    };
+    void init();
+  }, []);
+
+  if (loading) return <Loading />;
+
+  return <Page>{cards}</Page>;
 }

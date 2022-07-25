@@ -97,6 +97,7 @@ export interface Post {
       enabled: boolean;
     } | null;
     pwls: number;
+    promoted: boolean;
     quarantine: boolean;
     removal_reason: string | null;
     removed_by: string | null;
@@ -208,3 +209,6 @@ export interface Video {
   is_gif: boolean;
   transcoding_status: string;
 }
+
+export type SortType = 'new' | 'top' | 'hot' | 'controversial' | 'rising';
+export type TimeType = 'hour' | 'day' | 'week' | 'month' | 'year' | 'all';
