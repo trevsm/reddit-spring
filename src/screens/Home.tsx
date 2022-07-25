@@ -13,7 +13,7 @@ const Page = styled(ScrollView)`
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const {getPosts, loading} = useQueryPosts();
-  const [sort, setSort] = useState<SortType>('hot');
+  const [sort, setSort] = useState<SortType>(SortType.Hot);
 
   const cards = useMemo(
     () =>
@@ -25,7 +25,7 @@ export default function Home() {
 
   useEffect(() => {
     const init = async () => {
-      const posts = await getPosts({sort: 'new'});
+      const posts = await getPosts({sort});
       setPosts(posts);
     };
     void init();

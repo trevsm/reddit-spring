@@ -8,8 +8,8 @@ export default function useQueryPosts() {
   const [error, setError] = useState(null);
 
   const getPosts = async ({
-    time = 'month',
-    sort = 'top',
+    time = TimeType.All,
+    sort = SortType.Top,
     withAds = false,
     limit = 25,
   }: {
@@ -32,7 +32,7 @@ export default function useQueryPosts() {
     const queryString = objectToQueryString(params);
     try {
       const response = await fetch(
-        urls.api.base + '/' + sort + '.json' + queryString
+        urls.api.base + '/' + sort.toLocaleLowerCase() + '.json' + queryString
       );
       const data = await response.json();
       const postsWithoutAds = data.data.children.filter(

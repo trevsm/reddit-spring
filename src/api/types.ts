@@ -210,5 +210,19 @@ export interface Video {
   transcoding_status: string;
 }
 
-export type SortType = 'new' | 'top' | 'hot' | 'controversial' | 'rising';
-export type TimeType = 'hour' | 'day' | 'week' | 'month' | 'year' | 'all';
+export enum SortType {
+  New = 'new',
+  Top = 'top',
+  Hot = 'hot',
+  Controversial = 'controversial',
+  Rising = 'rising',
+}
+
+export enum TimeType {
+  Hour = 'hour',
+  Day = 'day',
+  Week = 'week',
+  Month = 'month',
+  Year = 'year',
+  All = 'all',
+}
