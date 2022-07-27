@@ -10,3 +10,7 @@ export const objectToQueryString = (obj: any) => {
 export const fixIconUrl = (url: string) => {
   return url.replace('&amp;', '&');
 };
+
+export const wait = (timeout: number) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};

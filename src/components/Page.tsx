@@ -1,7 +1,10 @@
-import {Button, StatusBar, TextInput} from 'react-native';
+import {StatusBar, TextInput} from 'react-native';
 import {View} from 'react-native';
 import styled from 'styled-components/native';
 import Menu from '../icons/Menu';
+import {useLoading} from '../stores/useLoading';
+import Loading from './Loading';
+import Popup from './Popup';
 
 const PageStyled = styled(View)`
   padding-top: ${StatusBar.currentHeight ? StatusBar.currentHeight + 55 : 0}px;
@@ -13,7 +16,7 @@ const Header = styled(View)`
   right: 0;
   flex: 1;
 
-  z-index: 5000;
+  z-index: 9999;
   padding: 10px 0;
   padding-top: ${StatusBar.currentHeight ? StatusBar.currentHeight + 10 : 0}px;
   background-color: white;
@@ -30,13 +33,23 @@ const Input = styled(TextInput)`
 `;
 
 export default function Page({children}: {children: any}) {
+  const {loading} = useLoading();
+
+  const Content = () => {
+    if (loading) return <Loading />;
+    return children;
+  };
+
   return (
-    <PageStyled>
-      <Header>
-        <Menu />
-        <Input value={'asdf'} />
-      </Header>
-      {children}
-    </PageStyled>
+    <>
+      <Popup />
+      <PageStyled>
+        <Header>
+          <Menu />
+          <Input value={'asdf'} />
+        </Header>
+        <Content />
+      </PageStyled>
+    </>
   );
 }

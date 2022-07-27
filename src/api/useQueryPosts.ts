@@ -1,25 +1,26 @@
 import {useState, useEffect} from 'react';
+import {useLoading} from '../stores/useLoading';
 import {objectToQueryString} from '../tools';
 import {urls} from '../urls';
 import {Post, SortType, TimeType} from './types';
 
 export default function useQueryPosts() {
-  const [loading, setLoading] = useState(true);
+  const {setLoading} = useLoading();
   const [error, setError] = useState(null);
 
   const getPosts = async ({
-    time = TimeType.All,
-    value = SortType.Top,
+    time = TimeType.Hour,
+    sort = SortType.New,
     withAds = false,
     limit = 25,
   }: {
     time?: TimeType;
-    value?: SortType;
+    sort?: SortType;
     withAds?: boolean;
     limit?: number;
   }) => {
     const params = {
-      value,
+      sort,
       t: time,
       withAds,
       limit,
@@ -32,7 +33,7 @@ export default function useQueryPosts() {
     const queryString = objectToQueryString(params);
     try {
       const response = await fetch(
-        urls.api.base + '/' + value.toLocaleLowerCase() + '.json' + queryString
+        urls.api.base + '/' + sort.toLocaleLowerCase() + '.json' + queryString
       );
       const data = await response.json();
       const postsWithoutAds = data.data.children.filter(
@@ -45,5 +46,5 @@ export default function useQueryPosts() {
     }
   };
 
-  return {getPosts, loading, error};
+  return {getPosts, error};
 }
