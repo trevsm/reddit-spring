@@ -1,22 +1,35 @@
 import {useState, useEffect, useMemo} from 'react';
-import {View, Text, ScrollView} from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
+import {Button, Text, View} from 'react-native';
+import {ScrollView} from 'react-native';
 import styled from 'styled-components/native';
 import {SortType} from '../api/types';
 import useQueryPosts from '../api/useQueryPosts';
 import Card from '../components/Card';
 import Loading from '../components/Loading';
+import Page from '../components/Page';
 
-const Page = styled(View)`
-  background-color: #ffffff;
+const Top = styled(View)`
+  padding: 20px;
+  background-color: white;
+  border-color: #e0e0e0;
+  border-bottom-width: 1px;
+  margin-bottom: 10px;
+`;
+const Title = styled(Text)`
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+`;
+const SortButton = styled(Text)`
+  font-size: 20px;
 `;
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const {getPosts, loading} = useQueryPosts();
 
-  const [sort, setSort] = useState<SortType>(SortType.Hot);
-  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState<SortType>(SortType.Hot);
 
   const cards = useMemo(
     () =>
@@ -27,49 +40,25 @@ export default function Home() {
   );
 
   const init = async () => {
-    const posts = await getPosts({sort});
+    const posts = await getPosts({value});
     setPosts(posts);
   };
 
   useEffect(() => {
     void init();
-  }, [sort]);
+  }, [value]);
 
   if (loading) return <Loading />;
 
   return (
     <Page>
-      <View
-        style={{
-          zIndex: 9999,
-          padding: 10,
-          paddingBottom: 20,
-          borderBottomWidth: 1,
-        }}
-      >
-        <DropDownPicker
-          open={open}
-          setOpen={setOpen}
-          value={sort}
-          setValue={setSort}
-          items={Object.keys(SortType).map((key) => ({
-            value: key,
-            label: key,
-          }))}
-          containerStyle={{height: 40}}
-          listItemContainerStyle={{padding: 10}}
-          style={{
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10,
-            borderBottomLeftRadius: 10,
-            borderBottomRightRadius: 10,
-          }}
-        />
-      </View>
+      {/* <Dropdown value={value} /> */}
       <ScrollView>
-        <Text></Text>
+        <Top>
+          <Title>Popular</Title>
+          <Text>asdf</Text>
+        </Top>
         {cards}
-        <Text></Text>
       </ScrollView>
     </Page>
   );
